@@ -1,0 +1,37 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/BallSubsystem": "Subsystem",
+      "/LiveWindow/GyroSubsystem": "Subsystem",
+      "/LiveWindow/MecanumDriveSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/MecanumDrive[1]": "MecanumDrive",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/Shuffleboard/Teleop/Motor Control/Intake Lifter Go to Position": "Command",
+      "/Shuffleboard/Teleop/Motor Control/Intake Lifter run voltage": "Command",
+      "/Shuffleboard/Teleop/Motor Control/Intake Motor Start": "Command",
+      "/Shuffleboard/Teleop/Motor Control/Intake Motor Start at Dashboard speed": "Command",
+      "/Shuffleboard/Teleop/Motor Control/Intake Motor Stop": "Command"
+    }
+  },
+  "NetworkTables": {
+    "Shuffleboard": {
+      " Motor Settings": {
+        "open": true
+      },
+      "Teleop": {
+        "Motor Control": {
+          "open": true
+        }
+      }
+    }
+  }
+}
