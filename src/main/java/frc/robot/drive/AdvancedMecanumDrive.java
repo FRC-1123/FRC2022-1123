@@ -372,5 +372,4 @@ public class AdvancedMecanumDrive extends RobotDriveBase implements Sendable, Au
         () -> m_rearRightMotor.get() * m_rightSideInvertMultiplier,
         value -> m_rearRightMotor.set(value * m_rightSideInvertMultiplier));
   }
-
 }

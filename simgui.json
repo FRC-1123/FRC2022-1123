@@ -1,28 +1,42 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "window": {
-        "visible": false
-      }
-    }
-  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/BallSubsystem": "Subsystem",
+      "/LiveWindow/BallSubsystem/Ball Subsystem": "Subsystem",
+      "/LiveWindow/ClimbingSubsystem/Climbing Subsystem": "Subsystem",
       "/LiveWindow/GyroSubsystem": "Subsystem",
+      "/LiveWindow/GyroSubsystem/Gyro subsystem": "Subsystem",
       "/LiveWindow/MecanumDriveSubsystem": "Subsystem",
+      "/LiveWindow/MecanumDriveSubsystem/Drive Subsystem": "Subsystem",
       "/LiveWindow/Ungrouped/MecanumDrive[1]": "MecanumDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/Shuffleboard/Endgame/10 pt climb step 1": "Command",
+      "/Shuffleboard/Endgame/10 pt climb step 2": "Command",
+      "/Shuffleboard/Endgame/10 pt climb step 3": "Command",
+      "/Shuffleboard/Teleop/Intake Lifter Stop": "Command",
+      "/Shuffleboard/Teleop/Intake Motor Stop": "Command",
+      "/Shuffleboard/Teleop/Intake Motor Toggle": "Command",
+      "/Shuffleboard/Teleop/Intake Motor Toggle at Dashboard Speed": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Lifter Go to Position": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Lifter run voltage": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Motor Start": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Motor Start at Dashboard speed": "Command",
-      "/Shuffleboard/Teleop/Motor Control/Intake Motor Stop": "Command"
+      "/Shuffleboard/Teleop/Motor Control/Intake Motor Stop": "Command",
+      "/SmartDashboard/Ball Subsystem": "Subsystem"
     }
   },
   "NetworkTables": {
+    "LiveWindow": {
+      "ClimbingSubsystem": {
+        "Climbing Subsystem": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
     "Shuffleboard": {
       " Motor Settings": {
         "open": true
