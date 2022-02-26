@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbingSubsystem;
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 
 /**
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class RaiseHooksPos extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
   /**
    * Creates a new ExampleCommand.

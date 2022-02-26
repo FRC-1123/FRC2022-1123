@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -12,7 +10,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
  */
 public final class Constants {
     public static final int frontLeftDriveMotorCanID = 11;
-    public static final int rearLeftDriveMotorCanID = 4; //13
+    public static final int rearLeftDriveMotorCanID = 13;
     public static final int frontRightDriveMotorCanID = 12;
     public static final int rearRightDriveMotorCanID = 14;
 
@@ -26,6 +24,9 @@ public final class Constants {
     public static final int joystickChannel = 0;
     public static final int xBoxChannel = 1;
 
-    public static final double intakeLifterTopPosition = 6;
-    public static final double intakeLifterDownPosition = 0.2;
+    public static final double intakeLifterTopPosition = 0;
+    public static final double intakeLifterDownPosition = -6;//distance between top and bottom make sure it is negative
+    public static final double intakeLifterScorePosition = intakeLifterTopPosition;
+    public static final double intakeLifterWheeliePosition = intakeLifterDownPosition + 2;
+    public static final double intakeLifterEndgamePosition = intakeLifterDownPosition + 0.75;
 }

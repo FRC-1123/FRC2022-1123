@@ -1,14 +1,15 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.drive.AdvancedMecanumDrive;
 
 import java.util.logging.Logger;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 public class MecanumDriveSubsystem extends SubsystemBase {
   private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -21,22 +22,43 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     WPI_TalonFX rearLeft;
     WPI_TalonFX frontRight;
     WPI_TalonFX rearRight;
+    SendableChooser<Boolean> showValues;
   public MecanumDriveSubsystem() {
     frontLeft = new WPI_TalonFX(Constants.frontLeftDriveMotorCanID);
     rearLeft = new WPI_TalonFX(Constants.rearLeftDriveMotorCanID);
     frontRight = new WPI_TalonFX(Constants.frontRightDriveMotorCanID);
     rearRight = new WPI_TalonFX(Constants.rearRightDriveMotorCanID);
 
+    frontLeft.setNeutralMode(NeutralMode.Brake);
+    rearLeft.setNeutralMode(NeutralMode.Brake);
+    frontRight.setNeutralMode(NeutralMode.Brake);
+    rearRight.setNeutralMode(NeutralMode.Brake);
+
     m_robotDrive = new AdvancedMecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
     setName("Drive Subsystem");
+    showValues = new SendableChooser<Boolean>();
+    showValues.setDefaultOption("false", false);
+    showValues.addOption("true", true);
+    SmartDashboard.putData("Mecanum Subsystem show value", showValues);
     logger.info("The mecanum drive subsystem is initialized.");
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // TODO: Implement periodic functionality such as updating dashboards/logs
-      // SmartDashboard.putNumber("Front left wheel position", getFrontLeftPosition());
+    if(showValues.getSelected()){
+      updateSmartDashboard();
+    }
+  }
+
+  public void updateSmartDashboard(){
+    SmartDashboard.putNumber("Front Left Speed", frontLeft.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Front Right Speed", frontRight.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Rear Left Speed", rearLeft.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Rear Right Speed", rearRight.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Front Left Position", frontLeft.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Front Right Position", frontRight.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Rear Left Position", rearLeft.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Rear Right Position", rearRight.getSelectedSensorPosition());
   }
 
   public double getFrontLeftPosition(){

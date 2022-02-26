@@ -14,28 +14,34 @@ public class RaiseBallsPos extends CommandBase {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   BallSubsystem balls;
   double position;
+  double maxSpeed;
   double lifterStartPosition;
   NetworkTableEntry positionEntry;
-  public RaiseBallsPos(BallSubsystem balls, NetworkTableEntry position) {
+  /**
+   * @param position position for arm to go to in inches. anything positive goes above starting configuration
+   * @param maxSpeed max speed motor runs at.
+   */
+  public RaiseBallsPos(BallSubsystem balls, NetworkTableEntry position, double maxSpeed) {
       this.balls = balls;
       // this.position = position.getDouble(0);
       this.position = 0;
       this.positionEntry = position;
+      this.maxSpeed = maxSpeed;
       lifterStartPosition = balls.getStartPosition();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(balls);
   }
 
-  public RaiseBallsPos(BallSubsystem balls, double position) {
+  /**
+   * @param position position for arm to go to in inches. anything positive goes above starting configuration
+   * @param maxSpeed max speed motor runs at.
+   */
+  public RaiseBallsPos(BallSubsystem balls, double position, double maxSpeed) {
     this.balls = balls;
     this.position = position * 24576;
+    this.maxSpeed = maxSpeed;
     lifterStartPosition = balls.getStartPosition();
     addRequirements(balls);
   }
@@ -77,8 +83,8 @@ public class RaiseBallsPos extends CommandBase {
 
   private void runMotor(){
     if(balls.getLiftMotorPosition()-lifterStartPosition > position){
-      if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) > 32000){
-        balls.driveLifter(-1);
+      if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) > 33000){
+        balls.driveLifter(-maxSpeed);
       }
       else if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) < 7000){
         balls.driveLifter(-0.15);
@@ -89,7 +95,7 @@ public class RaiseBallsPos extends CommandBase {
     }
     else{
       if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) > 30000){
-        balls.driveLifter(1);
+        balls.driveLifter(maxSpeed);
       }
       else if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) < 5000){
         balls.driveLifter(.15);

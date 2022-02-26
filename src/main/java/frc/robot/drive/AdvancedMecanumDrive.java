@@ -156,6 +156,7 @@ public class AdvancedMecanumDrive extends RobotDriveBase implements Sendable, Au
    */
   @SuppressWarnings("ParameterName")
   public void driveCartesian(double ySpeed, double xSpeed, double zRotation, double maxThrottle, double gyroAngle) {
+    // System.out.println("drive cartesian");
     if (!m_reported) {
       HAL.report(tResourceType.kResourceType_RobotDrive,
                  tInstances.kRobotDrive2_MecanumCartesian, 4);
@@ -185,6 +186,7 @@ public class AdvancedMecanumDrive extends RobotDriveBase implements Sendable, Au
       wheelSpeeds[MotorType.kRearLeft.value] = -input.x + input.y + zRotation;
       wheelSpeeds[MotorType.kRearRight.value] = input.x + input.y - zRotation; 
     // }
+    // System.out.println("before set wheel speed");
     normalize(wheelSpeeds);
     m_frontLeftMotor.set(wheelSpeeds[MotorType.kFrontLeft.value] * maxThrottle);
     m_frontRightMotor.set(wheelSpeeds[MotorType.kFrontRight.value] * maxThrottle
@@ -356,20 +358,20 @@ public class AdvancedMecanumDrive extends RobotDriveBase implements Sendable, Au
 
   @Override
   public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("MecanumDrive");
-    builder.setActuator(true);
-    builder.setSafeState(this::stopMotor);
-    builder.addDoubleProperty("Front Left Motor Speed",
-        m_frontLeftMotor::get,
-        m_frontLeftMotor::set);
-    builder.addDoubleProperty("Front Right Motor Speed",
-        () -> m_frontRightMotor.get() * m_rightSideInvertMultiplier,
-        value -> m_frontRightMotor.set(value * m_rightSideInvertMultiplier));
-    builder.addDoubleProperty("Rear Left Motor Speed",
-        m_rearLeftMotor::get,
-        m_rearLeftMotor::set);
-    builder.addDoubleProperty("Rear Right Motor Speed",
-        () -> m_rearRightMotor.get() * m_rightSideInvertMultiplier,
-        value -> m_rearRightMotor.set(value * m_rightSideInvertMultiplier));
+    // builder.setSmartDashboardType("MecanumDrive");
+    // builder.setActuator(true);
+    // builder.setSafeState(this::stopMotor);
+    // builder.addDoubleProperty("Front Left Motor Speed",
+    //     m_frontLeftMotor::get,
+    //     m_frontLeftMotor::set);
+    // builder.addDoubleProperty("Front Right Motor Speed",
+    //     () -> m_frontRightMotor.get() * m_rightSideInvertMultiplier,
+    //     value -> m_frontRightMotor.set(value * m_rightSideInvertMultiplier));
+    // builder.addDoubleProperty("Rear Left Motor Speed",
+    //     m_rearLeftMotor::get,
+    //     m_rearLeftMotor::set);
+    // builder.addDoubleProperty("Rear Right Motor Speed",
+    //     () -> m_rearRightMotor.get() * m_rightSideInvertMultiplier,
+    //     value -> m_rearRightMotor.set(value * m_rightSideInvertMultiplier));
   }
 }

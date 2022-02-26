@@ -1,20 +1,14 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import java.util.logging.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
-import com.revrobotics.CANEncoder;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 
 
 /**
@@ -28,6 +22,7 @@ public class ClimbingSubsystem extends SubsystemBase {
   private RelativeEncoder massMoverEncoder = massMover.getEncoder();
   private double winchStartPosition;
   private double massMoverStartPosition;
+  private SendableChooser<Boolean> showValues;
 
   public ClimbingSubsystem() {
     // Wipe any prior motor settings
@@ -35,6 +30,10 @@ public class ClimbingSubsystem extends SubsystemBase {
     winchStartPosition = winchEncoder.getPosition();
     massMoverStartPosition = massMoverEncoder.getPosition();
     setName("Climbing Subsystem");
+    showValues = new SendableChooser<Boolean>();
+    showValues.setDefaultOption("false", false);
+    showValues.addOption("true", true);
+    SmartDashboard.putData("Climbing Subsystem show value", showValues);
   }
 
   public void runWinch(double input){
@@ -79,11 +78,15 @@ public class ClimbingSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if(){
-      SmartDashboard.putNumber("Hook position", winchEncoder.getPosition());
-      SmartDashboard.putNumber("Hook start position", winchStartPosition);
-      SmartDashboard.putNumber("Mass Mover position", massMoverEncoder.getPosition());
-      SmartDashboard.putNumber("Mass mover start position", massMoverStartPosition);
-    // }
+    if(showValues.getSelected()){
+      updateSmartDashboard();
+    }
+  }
+
+  public void updateSmartDashboard(){
+      SmartDashboard.putNumber("mass mover position", massMoverEncoder.getPosition());
+      SmartDashboard.putNumber("mass mover velocity", massMoverEncoder.getVelocity());
+      SmartDashboard.putNumber("hooks position", winchEncoder.getPosition());
+      SmartDashboard.putNumber("hooks velocity", winchEncoder.getVelocity());
   }
 }

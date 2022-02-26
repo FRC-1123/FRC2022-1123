@@ -87,15 +87,16 @@ public class DriveStraightPos extends CommandBase {
   }
 
   private double inchToClicks(double inches){
-    return inches * 385843;
+    return inches * 1087; 
+    //inches / (3.14 * 6) * 10 * 2048
   }
 
   private void drive(){
     if((drive.getFrontLeftPosition()-startPosition)*.98-position > 0){
-      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 50000){
+      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 10000){
         drive.driveCartesian(0, 1, 0, driveSpeed);
       }
-      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 10000){
+      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 5000){
         drive.driveCartesian(0, 1, 0, driveSpeed/2);
       }
       else {
@@ -103,14 +104,14 @@ public class DriveStraightPos extends CommandBase {
       }
     }
     else {
-      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 50000){
-        drive.driveCartesian(0, 1, 0, driveSpeed);
+      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 10000){
+        drive.driveCartesian(0, -1, 0, driveSpeed);
       }
-      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 10000){
-        drive.driveCartesian(0, 1, 0, driveSpeed/2);
+      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 5000){
+        drive.driveCartesian(0, -1, 0, driveSpeed/2);
       }
       else {
-        drive.driveCartesian(0, 1, 0, driveSpeed/1.5);
+        drive.driveCartesian(0, -1, 0, driveSpeed/1.5);
       }
     }
   }

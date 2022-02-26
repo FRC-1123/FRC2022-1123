@@ -7,7 +7,7 @@ import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 
 /**
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class BaseClimbCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
   /**
    * Creates a new ExampleCommand.
@@ -58,7 +58,7 @@ public class BaseClimbCommand extends CommandBase {
     this.intakeLifterDistance = intakeLifterDistance;
     driveCommand = new DriveStraightPos(drive, driveDistance, driveSpeed);
     moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance);
+    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
   }
 
@@ -76,7 +76,7 @@ public class BaseClimbCommand extends CommandBase {
     this.intakeLifterDistance = intakeLifterDistance;
     driveCommand = new DriveStraightPos(drive, driveDistance, driveSpeed);
     moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance);
+    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
  }
 
@@ -89,7 +89,7 @@ public class BaseClimbCommand extends CommandBase {
     this.hookDistance = hookDistance;
     this.intakeLifterDistance = intakeLifterDistance;
     moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance);
+    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
   }
 
@@ -109,7 +109,7 @@ public BaseClimbCommand(ClimbingSubsystem climb, BallSubsystem balls, double mas
   this.hookDistance = hookDistance;
   this.intakeLifterDistance = intakeLifterDistance;
   moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-  intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance);
+  intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
   raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
 }
 
