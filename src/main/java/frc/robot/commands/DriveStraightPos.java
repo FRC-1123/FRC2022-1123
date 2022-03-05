@@ -24,7 +24,8 @@ public class DriveStraightPos extends CommandBase {
   NetworkTableEntry positionEntry;
   double driveSpeed;
   NetworkTableEntry driveSpeedEntry;
-  double startPosition;
+  double leftStartPosition;
+  double rightStartPosition;
   public DriveStraightPos(MecanumDriveSubsystem drive, NetworkTableEntry position, NetworkTableEntry driveSpeed) {
     this.drive = drive;
     this.position = inchToClicks(position.getDouble(0));
@@ -55,7 +56,8 @@ public class DriveStraightPos extends CommandBase {
   @Override
   public void initialize() {
     logger.info("Got to Drive Forward activate");
-    startPosition = drive.getFrontLeftPosition();
+    leftStartPosition = drive.getFrontLeftPosition();
+    rightStartPosition = drive.getFrontRightPosition();
     if(positionEntry != null){
       position = inchToClicks(positionEntry.getDouble(0));
     }
@@ -80,7 +82,7 @@ public class DriveStraightPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 7000){
+    if(Math.abs((drive.getFrontLeftPosition()-leftStartPosition)*.98-position) < 7000){
 
     }
     return false;
@@ -92,11 +94,12 @@ public class DriveStraightPos extends CommandBase {
   }
 
   private void drive(){
-    if((drive.getFrontLeftPosition()-startPosition)*.98-position > 0){
-      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 10000){
+    double delta = getDistanceTravel();
+    if(delta > 0){
+      if(Math.abs(delta)> 10000){
         drive.driveCartesian(0, 1, 0, driveSpeed);
       }
-      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 5000){
+      else if(Math.abs(delta) < 5000){
         drive.driveCartesian(0, 1, 0, driveSpeed/2);
       }
       else {
@@ -104,15 +107,19 @@ public class DriveStraightPos extends CommandBase {
       }
     }
     else {
-      if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position)> 10000){
+      if(Math.abs(delta)> 10000){
         drive.driveCartesian(0, -1, 0, driveSpeed);
       }
-      else if(Math.abs((drive.getFrontLeftPosition()-startPosition)*.98-position) < 5000){
-        drive.driveCartesian(0, -1, 0, driveSpeed/2);
+      else if(Math.abs(delta) < 5000){
+        drive.driveCartesian(0, -1, 0, driveSpeed/2); 
       }
       else {
         drive.driveCartesian(0, -1, 0, driveSpeed/1.5);
       }
     }
+  }
+
+  private double getDistanceTravel(){
+    return ((drive.getFrontLeftPosition()-leftStartPosition) + (drive.getFrontRightPosition() - rightStartPosition))/2 *.95-position;
   }
 }

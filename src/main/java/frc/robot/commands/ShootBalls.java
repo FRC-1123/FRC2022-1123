@@ -13,14 +13,14 @@ public class ShootBalls extends CommandBase {
 
   // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   BallSubsystem balls;
-  public ShootBalls(BallSubsystem balls) {
+  double endTime;
+/**
+ * @param time time in seconds for ball to shoot
+ */
+  public ShootBalls(BallSubsystem balls, double time) {
       this.balls = balls;
+      this.endTime = endTime * 50;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(balls);
     }
@@ -47,7 +47,7 @@ public class ShootBalls extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(time > 35){
+    if(time > endTime){
       return true;
     }
     return false;

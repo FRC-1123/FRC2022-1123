@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbingSubsystem;
 // import java.util.logging.Logger;
+import frc.robot.subsystems.MassMoverSubsystem;
 
 
 /**
@@ -19,34 +19,34 @@ public class MoveMassMoversPos extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  ClimbingSubsystem climb;
+  MassMoverSubsystem mover;
   double position;
   double speed;
   NetworkTableEntry positionEntry;
   NetworkTableEntry speedEntry;
-  public MoveMassMoversPos(ClimbingSubsystem climb, NetworkTableEntry position, NetworkTableEntry speed) {
-      this.climb = climb;
+  public MoveMassMoversPos(MassMoverSubsystem mover, NetworkTableEntry position, NetworkTableEntry speed) {
+      this.mover = mover;
       this.position = position.getDouble(0);
       this.positionEntry = position;
       this.speed = speed.getDouble(0);
       this.speedEntry = speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climb);
+    addRequirements(mover);
     }
 
-    public MoveMassMoversPos(ClimbingSubsystem climb, double position, NetworkTableEntry speed) {
-      this.climb = climb;
+    public MoveMassMoversPos(MassMoverSubsystem mover, double position, NetworkTableEntry speed) {
+      this.mover = mover;
       this.position = position;
       this.speed = speed.getDouble(0);
       this.speedEntry = speed;
-    // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(mover);
     }
 
-    public MoveMassMoversPos(ClimbingSubsystem climb, double position, double speed) {
-      this.climb = climb;
+    public MoveMassMoversPos(MassMoverSubsystem mover, double position, double speed) {
+      this.mover = mover;
       this.position = position;
       this.speed = speed;
-    // Use addRequirements() here to declare subsystem dependencies.
+      addRequirements(mover);
     }
 
   // Called when the command is initially scheduled.
@@ -71,13 +71,13 @@ public class MoveMassMoversPos extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climb.stopMassMover();
+    mover.stopMassMover();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double massMoverDelta = climb.getMassMoverPosition()-climb.getMassMoverStartPosition() - position;
+    double massMoverDelta = mover.getMassMoverPosition()-mover.getMassMoverStartPosition() - position;
     if(Math.abs(massMoverDelta) < 4000){
       return true;
     }
@@ -85,22 +85,22 @@ public class MoveMassMoversPos extends CommandBase {
   }
 
   private void move(){
-    double massMoverDelta = climb.getMassMoverPosition()-climb.getMassMoverStartPosition() - position;
+    double massMoverDelta = mover.getMassMoverPosition()-mover.getMassMoverStartPosition() - position;
     if(massMoverDelta > 0){
       if(Math.abs(massMoverDelta) > 30000)
-        climb.runMassMover(speed);
+        mover.runMassMover(speed);
       else if(Math.abs(massMoverDelta) < 7000)
-        climb.runMassMover(speed/3);
+        mover.runMassMover(speed/3);
       else 
-        climb.runMassMover(speed/2);
+        mover.runMassMover(speed/2);
     }
     else {
       if(Math.abs(massMoverDelta) > 30000)
-        climb.runMassMover(-speed);
+        mover.runMassMover(-speed);
       else if(Math.abs(massMoverDelta) < 7000)
-        climb.runMassMover(-speed/3);
+        mover.runMassMover(-speed/3);
       else
-        climb.runMassMover(-speed/2);
+        mover.runMassMover(-speed/2);
     }
   }
 }

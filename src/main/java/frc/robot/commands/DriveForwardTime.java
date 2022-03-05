@@ -1,56 +1,58 @@
 package frc.robot.commands;
 
-// import src.main.java.frc.subsystems;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmLifterSubsystem;
-
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
+import frc.robot.subsystems.MecanumDriveSubsystem;
 
 
 /**
  * An example command that uses an example subsystem.
  */
-public class RaiseBallsStop extends CommandBase {
+public class DriveForwardTime extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
+  MecanumDriveSubsystem drive;
+  double moveTime;
+  double speed;
   /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * @param moveTime time to move in seconds
+   * @param speed speed to drive at in percent
    */
-  ArmLifterSubsystem lifter;
-  public RaiseBallsStop(ArmLifterSubsystem lifter) {
-      this.lifter = lifter;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(lifter);
+  public DriveForwardTime(MecanumDriveSubsystem drive, double moveTime, double speed) {
+      this.drive = drive;
+      this.moveTime = moveTime * 50;// code call per second
+      this.speed = speed;
+      addRequirements(drive);
     }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    logger.info("got to Raise balls stop motor");
-    lifter.stopLifter();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    drive.driveCartesian(0, 1, 0, speed);
     time++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drive.driveCartesian(0, 0, 0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(time > 5){
+    if(time > moveTime){
       return true;
     }
     return false;
   }
+
 }

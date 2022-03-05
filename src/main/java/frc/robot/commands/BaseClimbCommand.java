@@ -3,8 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmLifterSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.ClimbingSubsystem;
+import frc.robot.subsystems.MassMoverSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 
 // import java.util.logging.Logger;
@@ -26,6 +28,7 @@ public class BaseClimbCommand extends CommandBase {
   ClimbingSubsystem climb;
   MecanumDriveSubsystem drive;
   BallSubsystem balls;
+  ArmLifterSubsystem lifter;
   double driveSpeed;
   double massMoverSpeed;
   double driveDistance;
@@ -44,12 +47,13 @@ public class BaseClimbCommand extends CommandBase {
    * @param driveSpeed how fast to move in percent
    * @param massMoverSpeed how fast to move in percent
    */
-  public BaseClimbCommand(ClimbingSubsystem climb, MecanumDriveSubsystem drive, BallSubsystem balls,
+  public BaseClimbCommand(ClimbingSubsystem climb, MecanumDriveSubsystem drive, BallSubsystem balls, ArmLifterSubsystem lifter, MassMoverSubsystem mass,
    double driveDistance, double massMoverDistance, double hookDistance, double intakeLifterDistance,
    NetworkTableEntry driveSpeed, NetworkTableEntry massMoverSpeed) {
     this.climb = climb;
     this.drive = drive;
     this.balls = balls;
+    this.lifter = lifter;
     this.driveSpeed = driveSpeed.getDouble(0);
     this.massMoverSpeed = massMoverSpeed.getDouble(0);
     this.driveDistance = driveDistance;
@@ -57,17 +61,18 @@ public class BaseClimbCommand extends CommandBase {
     this.hookDistance = hookDistance;
     this.intakeLifterDistance = intakeLifterDistance;
     driveCommand = new DriveStraightPos(drive, driveDistance, driveSpeed);
-    moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
+    moveMassCommand = new MoveMassMoversPos(mass, massMoverDistance, massMoverSpeed);
+    intakeLiftCommand = new RaiseBallsPos(lifter, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
   }
 
-  public BaseClimbCommand(ClimbingSubsystem climb, MecanumDriveSubsystem drive, BallSubsystem balls,
+  public BaseClimbCommand(ClimbingSubsystem climb, MecanumDriveSubsystem drive, BallSubsystem balls, ArmLifterSubsystem lifter, MassMoverSubsystem mass,
    double driveDistance, double massMoverDistance, double hookDistance, double intakeLifterDistance,
    double driveSpeed, double massMoverSpeed) {
     this.climb = climb;
     this.drive = drive;
     this.balls = balls;
+    this.lifter = lifter;
     this.driveSpeed = driveSpeed;
     this.massMoverSpeed = massMoverSpeed;
     this.driveDistance = driveDistance;
@@ -75,21 +80,22 @@ public class BaseClimbCommand extends CommandBase {
     this.hookDistance = hookDistance;
     this.intakeLifterDistance = intakeLifterDistance;
     driveCommand = new DriveStraightPos(drive, driveDistance, driveSpeed);
-    moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
+    moveMassCommand = new MoveMassMoversPos(mass, massMoverDistance, massMoverSpeed);
+    intakeLiftCommand = new RaiseBallsPos(lifter, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
  }
 
-  public BaseClimbCommand(ClimbingSubsystem climb, BallSubsystem balls, double massMoverDistance,
+  public BaseClimbCommand(ClimbingSubsystem climb, BallSubsystem balls, ArmLifterSubsystem lifter, MassMoverSubsystem mass, double massMoverDistance,
    double hookDistance, double intakeLifterDistance, double massMoverSpeed) {
     this.climb = climb;
     this.balls = balls;
+    this.lifter = lifter;
     this.massMoverSpeed = massMoverSpeed;
     this.massMoverDistance = massMoverDistance;
     this.hookDistance = hookDistance;
     this.intakeLifterDistance = intakeLifterDistance;
-    moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-    intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
+    moveMassCommand = new MoveMassMoversPos(mass, massMoverDistance, massMoverSpeed);
+    intakeLiftCommand = new RaiseBallsPos(lifter, intakeLifterDistance, 1);
     raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
   }
 
@@ -100,16 +106,17 @@ public class BaseClimbCommand extends CommandBase {
  * @param intakeLifterDistance where to put intake relative to the lowest point in inches
  * @param massMoverSpeed how fast to move in percent
  */
-public BaseClimbCommand(ClimbingSubsystem climb, BallSubsystem balls, double massMoverDistance,
+public BaseClimbCommand(ClimbingSubsystem climb, BallSubsystem balls, ArmLifterSubsystem lifter, MassMoverSubsystem mass, double massMoverDistance,
  double hookDistance, double intakeLifterDistance, NetworkTableEntry massMoverSpeed) {
   this.climb = climb;
   this.balls = balls;
+  this.lifter = lifter;
   this.massMoverSpeed = massMoverSpeed.getDouble(0.1);
   this.massMoverDistance = massMoverDistance;
   this.hookDistance = hookDistance;
   this.intakeLifterDistance = intakeLifterDistance;
-  moveMassCommand = new MoveMassMoversPos(climb, massMoverDistance, massMoverSpeed);
-  intakeLiftCommand = new RaiseBallsPos(balls, intakeLifterDistance, 1);
+  moveMassCommand = new MoveMassMoversPos(mass, massMoverDistance, massMoverSpeed);
+  intakeLiftCommand = new RaiseBallsPos(lifter, intakeLifterDistance, 1);
   raiseHooksCommand = new RaiseHooksPos(climb, hookDistance);
 }
 

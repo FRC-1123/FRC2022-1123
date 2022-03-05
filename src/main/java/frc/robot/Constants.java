@@ -25,7 +25,7 @@ public final class Constants {
     public static final int xBoxChannel = 1;
 
     public static final double intakeLifterTopPosition = 0;
-    public static final double intakeLifterDownPosition = -6;//distance between top and bottom make sure it is negative
+    public static final double intakeLifterDownPosition = -18.4;//distance between top and bottom make sure it is negative
     public static final double intakeLifterScorePosition = intakeLifterTopPosition;
     public static final double intakeLifterWheeliePosition = intakeLifterDownPosition + 2;
     public static final double intakeLifterEndgamePosition = intakeLifterDownPosition + 0.75;

@@ -31,16 +31,14 @@ public class GyroTurn extends CommandBase {
       this.gyro = gyro;
       this.position = position.getDouble(0);
       this.positionEntry = position;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+      addRequirements(drive);
     }
 
     public GyroTurn(MecanumDriveSubsystem drive, GyroSubsystem gyro, double position) {
       this.drive = drive;
       this.gyro = gyro;
       this.position = position;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drive);
+      addRequirements(drive);
     }
 
   // Called when the command is initially scheduled.
@@ -49,8 +47,7 @@ public class GyroTurn extends CommandBase {
     if(positionEntry != null){
       position = positionEntry.getDouble(0);
     }
-    position = position * 43481.95;
-    move();
+    position = Math.abs(position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -68,7 +65,7 @@ public class GyroTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double delta = Math.abs(gyro.getAngle() - position);
+    double delta = Math.abs(Math.abs(rawAngleToAbsolute(gyro.getAngle()) - position));
     if(Math.abs(delta) < 3){
       return true;
     }
@@ -76,23 +73,30 @@ public class GyroTurn extends CommandBase {
   }
 
   private void move(){
-    double delta = gyro.getAngle() - position;
+    double delta = Math.abs(rawAngleToAbsolute(gyro.getAngle()) - position);
     if(delta > 180){
       delta = 360-delta;
-      if(delta > 20)
-        drive.driveCartesian(0, 0, 1, 0.6);
-      else if(delta < 7)
-        drive.driveCartesian(0, 0, 1, 0.3);
+      if(delta > 30)
+        drive.driveCartesian(0, 0, -1, 0.1); //0.6
+      else if(delta < 10)
+        drive.driveCartesian(0, 0, -1, 0.1); //0.3
       else 
-        drive.driveCartesian(0, 0, 1, 0.2);
+        drive.driveCartesian(0, 0, -1, 0.1);
     }
     else {
-      if(delta > 20)
-        drive.driveCartesian(0, 0, -1, 0.6);
-      else if(delta < 7)
-        drive.driveCartesian(0, 0, -1, 0.3);
+      if(delta > 30)
+        drive.driveCartesian(0, 0, 1, 0.1);
+      else if(delta < 10)
+        drive.driveCartesian(0, 0, 1, 0.1);
       else 
-        drive.driveCartesian(0, 0, -1, 0.2);
+        drive.driveCartesian(0, 0, 1, 0.1);
     }
+  }
+
+  private double rawAngleToAbsolute(double angle){
+    if(angle < 0){
+      return 360 + (angle % 360);
+    }
+    return angle % 360;
   }
 }

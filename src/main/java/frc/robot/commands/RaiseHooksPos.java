@@ -5,23 +5,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimbingSubsystem;
 // import java.util.logging.Logger;
 
-
-/**
- * An example command that uses an example subsystem.
- */
 public class RaiseHooksPos extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   ClimbingSubsystem climb;
   double position;
   NetworkTableEntry positionEntry;
+  /**
+   *    * @param position network entry that inputs absolute position in inches
+   */
   public RaiseHooksPos(ClimbingSubsystem climb, NetworkTableEntry position) {
       this.climb = climb;
       this.position = position.getDouble(0);
@@ -29,6 +23,10 @@ public class RaiseHooksPos extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climb);
     }
+
+    /**
+     * @param position absolute position to go to in inches
+     */
 
     public RaiseHooksPos(ClimbingSubsystem climb, double position) {
       this.climb = climb;

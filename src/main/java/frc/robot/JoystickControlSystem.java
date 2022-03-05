@@ -4,12 +4,15 @@ import java.util.logging.Logger;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 // import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RaiseBallsPos;
 import frc.robot.commands.RaiseBallsToggle;
+import frc.robot.commands.RaiseHooksPos;
 // import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -17,7 +20,7 @@ public class JoystickControlSystem {
   public static Joystick driverJoystick;
   private static XboxController xboxController;
 
-  public static void initialize(Joystick driverJoystickInput, MecanumDriveSubsystem driveSubsystemInput, GyroSubsystem Gyro, BallSubsystem ballSubsystem, XboxController xboxControllerInput) {
+  public static void initialize(Joystick driverJoystickInput, MecanumDriveSubsystem driveSubsystemInput, GyroSubsystem Gyro, BallSubsystem ballSubsystem, XboxController xboxControllerInput, ArmLifterSubsystem lifter) {
     Logger logger = Logger.getLogger(frc.robot.JoystickControlSystem.class.getName());
 
     driverJoystick = driverJoystickInput;
@@ -25,12 +28,19 @@ public class JoystickControlSystem {
     MecanumDriveSubsystem driveSubsystem = driveSubsystemInput;
 
     logger.info("Mecanum drive subsystem defaulting to driveCartesian.");
-    driveSubsystem.setDefaultCommand(new RunCommand(() -> driveSubsystem.driveCartesian(-driverJoystick.getX(),
-        driverJoystick.getY(), driverJoystick.getZ()/2, (1 - driverJoystick.getThrottle()) / 2), driveSubsystem));
+    RunCommand driveCommand = new RunCommand(() -> driveSubsystem.driveCartesian(-driverJoystick.getX(),
+    driverJoystick.getY(), driverJoystick.getZ()/2, (1 - driverJoystick.getThrottle()) / 2), driveSubsystem);
+    driveCommand.setName("Joystick drive");
+    driveSubsystem.setDefaultCommand(driveCommand);
     // ballSubsystem.setDefaultCommand(new RunCommand(() -> ballSubsystem.spinIntake(
     //   Math.abs(driverJoystick.getY()*((1 - driverJoystick.getThrottle()) / 4))+0.1), ballSubsystem));
     
-    ballSubsystem.setDefaultCommand(new RunCommand(() -> ballSubsystem.spinIntake(0.4), ballSubsystem));
+    ballSubsystem.setDefaultCommand(new RunCommand(() -> {
+      if((lifter.getLiftMotorPosition() - lifter.getStartPosition()) / 24576 < Constants.intakeLifterDownPosition + 1)
+        ballSubsystem.spinIntake(0.4);
+      else
+        ballSubsystem.spinIntake(0);
+      }, ballSubsystem));
 
     // logger.info("Driver button 10 bound to pivotCartesian");
     // JoystickButton driveModeButton = new JoystickButton(driverJoystick, 10);
@@ -41,24 +51,29 @@ public class JoystickControlSystem {
     // fieldOrientedButton.whenHeld(new RunCommand(() -> driveSubsystem.fieldCartesian(-driverJoystick.getX(),
     //   driverJoystick.getY(), driverJoystick.getZ(), (1 - driverJoystick.getThrottle()) / 2, Gyro.getAngle()), driveSubsystem));
     
+    RunCommand shootBallCommand = new RunCommand(() -> ballSubsystem.spinIntake(-1), ballSubsystem);
     JoystickButton shootBall = new JoystickButton(driverJoystick, 1);
-    shootBall.whenHeld(new RunCommand(() -> ballSubsystem.spinIntake(-1), ballSubsystem));
+    shootBall.whenHeld(shootBallCommand);
     
-    RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(ballSubsystem, Constants.intakeLifterTopPosition, 1);
+    RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.4);
     JoystickButton toggleBallPosition = new JoystickButton(driverJoystick, 2);
     toggleBallPosition.whenPressed(controllerRaiseBallsToggle);
     JoystickButton xboxToggleBallPosition = new JoystickButton(xboxController, 1);
     xboxToggleBallPosition.whenPressed(controllerRaiseBallsToggle);
 
     JoystickButton putBallsDown = new JoystickButton(driverJoystick, 3);
-    putBallsDown.whenPressed(new RaiseBallsPos(ballSubsystem, Constants.intakeLifterDownPosition, 1));
-    JoystickButton xboxPutBallsDown = new JoystickButton(xboxController, 3);
-    xboxPutBallsDown.whenPressed(new RaiseBallsPos(ballSubsystem, Constants.intakeLifterDownPosition, 1));
+    putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.4));
+    // JoystickButton xboxPutBallsDown = new JoystickButton(xboxController, 3);
+    // xboxPutBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.6));
 
     JoystickButton putBallsUp = new JoystickButton(driverJoystick, 4);
-    putBallsUp.whenPressed(new RaiseBallsPos(ballSubsystem, Constants.intakeLifterTopPosition, 1));
+    putBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.4));
     JoystickButton xboxPutBallsUp = new JoystickButton(xboxController, 2);
-    xboxPutBallsUp.whenPressed(new RaiseBallsPos(ballSubsystem, Constants.intakeLifterTopPosition, 1));
+    xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.4));
+
+    JoystickButton climb = new JoystickButton(driverJoystick, 5);
+    // climb.whileHeld(new StartEndCommand(() -> lifter.driveLifter(-0.35), () -> lifter.driveLifter(0), lifter));
+      climb.whenPressed(new RaiseBallsPos(lifter, -6, 0.4));
   }
 
   public static double getThrottle() {

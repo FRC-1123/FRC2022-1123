@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.BallSubsystem;
 // import java.util.logging.Logger;
+import frc.robot.subsystems.ArmLifterSubsystem;
 
 
 /**
@@ -13,14 +13,13 @@ public class RaiseBallsToggle extends RaiseBallsPos {
 
   // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   boolean up = true;
-  public RaiseBallsToggle(BallSubsystem balls, Double position, double maxSpeed) {
-    super(balls, position, maxSpeed);
+  /**
+   * @param position absolute position to go to in inches at the screw from the top
+   * @param maxSpeed max speed in percent to run at
+   */
+  public RaiseBallsToggle(ArmLifterSubsystem lifter, Double position, double maxSpeed) {
+    super(lifter, position, maxSpeed);
   }
 
   // Called when the command is initially scheduled.

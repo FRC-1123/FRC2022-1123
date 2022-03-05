@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallSubsystem;
+import frc.robot.subsystems.ArmLifterSubsystem;
 import java.util.logging.Logger;
 
 
@@ -14,7 +14,7 @@ public class RaiseBallsPos extends CommandBase {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
-  BallSubsystem balls;
+  ArmLifterSubsystem lifter;
   double position;
   double maxSpeed;
   double lifterStartPosition;
@@ -23,27 +23,27 @@ public class RaiseBallsPos extends CommandBase {
    * @param position position for arm to go to in inches. anything positive goes above starting configuration
    * @param maxSpeed max speed motor runs at.
    */
-  public RaiseBallsPos(BallSubsystem balls, NetworkTableEntry position, double maxSpeed) {
-      this.balls = balls;
+  public RaiseBallsPos(ArmLifterSubsystem lifter, NetworkTableEntry position, double maxSpeed) {
+      this.lifter = lifter;
       // this.position = position.getDouble(0);
       this.position = 0;
       this.positionEntry = position;
       this.maxSpeed = maxSpeed;
-      lifterStartPosition = balls.getStartPosition();
+      lifterStartPosition = lifter.getStartPosition();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(balls);
+    addRequirements(lifter);
   }
 
   /**
    * @param position position for arm to go to in inches. anything positive goes above starting configuration
    * @param maxSpeed max speed motor runs at.
    */
-  public RaiseBallsPos(BallSubsystem balls, double position, double maxSpeed) {
-    this.balls = balls;
+  public RaiseBallsPos(ArmLifterSubsystem lifter, double position, double maxSpeed) {
+    this.lifter = lifter;
     this.position = position * 24576;
     this.maxSpeed = maxSpeed;
-    lifterStartPosition = balls.getStartPosition();
-    addRequirements(balls);
+    lifterStartPosition = lifter.getStartPosition();
+    addRequirements(lifter);
   }
 
   // Called when the command is initially scheduled.
@@ -52,10 +52,9 @@ public class RaiseBallsPos extends CommandBase {
     logger.info("Got to Raise balls activate");
 
     if(positionEntry != null){
-      logger.info("IN POSITION ENTRY");
-      position = positionEntry.getDouble(2) *24576;
+      position = positionEntry.getDouble(2) * 24576;
     }
-    lifterStartPosition = balls.getStartPosition();
+    lifterStartPosition = lifter.getStartPosition();
     runMotor();
   }
 
@@ -63,45 +62,53 @@ public class RaiseBallsPos extends CommandBase {
   @Override
   public void execute() {
     time++;
+    motorPosition = lifter.getLiftMotorPosition();
     runMotor();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    balls.stopLifter();
+    lifter.stopLifter();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) < 500){
+    if(Math.abs(motorPosition-lifterStartPosition - position) < 500){
       return true;
     }
     return false;
   }
+  double motorPosition;
 
   private void runMotor(){
-    if(balls.getLiftMotorPosition()-lifterStartPosition > position){
-      if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) > 33000){
-        balls.driveLifter(-maxSpeed);
+    if(motorPosition-lifterStartPosition > position){
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 38000){
+        lifter.driveLifter(-maxSpeed);
       }
-      else if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) < 7000){
-        balls.driveLifter(-0.15);
+      else if(Math.abs(motorPosition-lifterStartPosition - position) > 33000){
+        lifter.driveLifter(-maxSpeed/2 - 0.05);
+      }
+      else if(Math.abs(motorPosition-lifterStartPosition - position) < 7000){
+        lifter.driveLifter(-0.15);
       }
       else{
-        balls.driveLifter(-0.3);
+        lifter.driveLifter(-0.2);
       }
     }
     else{
-      if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) > 30000){
-        balls.driveLifter(maxSpeed);
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 38000){
+        lifter.driveLifter(maxSpeed);
       }
-      else if(Math.abs(balls.getLiftMotorPosition()-lifterStartPosition - position) < 5000){
-        balls.driveLifter(.15);
+      else if(Math.abs(motorPosition-lifterStartPosition - position) > 33000){
+        lifter.driveLifter(maxSpeed/2 + 0.05);
+      }
+      else if(Math.abs(motorPosition-lifterStartPosition - position) < 5000){
+        lifter.driveLifter(.15);
       }
       else{
-        balls.driveLifter(0.3);
+        lifter.driveLifter(0.2);
       }
     }
   }

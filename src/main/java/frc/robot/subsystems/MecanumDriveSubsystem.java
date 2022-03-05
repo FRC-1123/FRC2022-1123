@@ -65,6 +65,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     return frontLeft.getSelectedSensorPosition();
   }
 
+  public double getFrontRightPosition(){
+    return frontRight.getSelectedSensorPosition();
+  }
+
   public void driveCartesian(double yval, double xval, double zval, double throttle) {
     //logger.info(String.format("X: %s, Y: %s, Z: %s, G: %s", xval, yval, zval, gyroval));
     m_robotDrive.driveCartesian(-yval, -xval, zval, throttle);

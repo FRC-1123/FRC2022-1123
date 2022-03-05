@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallSubsystem;
+import frc.robot.subsystems.ArmLifterSubsystem;
 
 import java.util.logging.Logger;
 
@@ -18,11 +18,11 @@ public class CalibrateIntakeArm extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  BallSubsystem balls;
-  public CalibrateIntakeArm(BallSubsystem balls) {
-    this.balls = balls;
+  ArmLifterSubsystem lifter;
+  public CalibrateIntakeArm(ArmLifterSubsystem lifter) {
+    this.lifter = lifter;
   // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(balls);
+    addRequirements(lifter);
   }
 
   // Called when the command is initially scheduled.
@@ -34,16 +34,16 @@ public class CalibrateIntakeArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    balls.driveLifter(-0.1);
+    lifter.driveLifter(-0.1);
     time++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    balls.stopLifter();
-    balls.resetPos();
-    balls.setStartPosition(0);
+    lifter.stopLifter();
+    lifter.resetPos();
+    lifter.setStartPosition(0);
   }
 
   // Returns true when the command should end.
@@ -52,7 +52,7 @@ public class CalibrateIntakeArm extends CommandBase {
     // if(balls.getLifterCurrent() > 0.8){
     //   return true;
     // }
-    if(time > 10 && Math.abs(balls.getLiftMotorVelocity()) < 200){
+    if(time > 10 && Math.abs(lifter.getLiftMotorVelocity()) < 190){
       return true;
     }
     return false;
