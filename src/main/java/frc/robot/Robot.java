@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -41,7 +42,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     CommandScheduler.getInstance().cancelAll();
-    inTestMode = false;
     Command autoCommand = RobotContainer.getAutonomousCommand();
     if (autoCommand != null) {
       autoCommand.schedule();
@@ -55,16 +55,23 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called once when teleop is enabled. */
+  double startTime = Timer.getFPGATimestamp();
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
+    startTime = Timer.getFPGATimestamp();
     inTestMode = false;
   }
 
   /** This function is called periodically during operator control. */
+  int counter = 0;
   @Override
   public void teleopPeriodic() {
+    counter++;
     CommandScheduler.getInstance().run();
+    if(counter % 50 == 0){
+    RobotContainer.setTeleTime(135- (Timer.getFPGATimestamp()-startTime));
+    }
   }
 
   /** This function is called once when the robot is disabled. */

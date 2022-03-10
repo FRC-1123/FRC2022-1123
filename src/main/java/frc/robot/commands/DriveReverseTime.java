@@ -8,7 +8,7 @@ import frc.robot.subsystems.MecanumDriveSubsystem;
 /**
  * An example command that uses an example subsystem.
  */
-public class DriveForwardTime extends CommandBase {
+public class DriveReverseTime extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   // private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -20,7 +20,7 @@ public class DriveForwardTime extends CommandBase {
    * @param moveTime time to move in seconds
    * @param speed speed to drive at in percent
    */
-  public DriveForwardTime(MecanumDriveSubsystem drive, double moveTime, double speed) {
+  public DriveReverseTime(MecanumDriveSubsystem drive, double moveTime, double speed) {
       this.drive = drive;
       this.moveTime = moveTime * 50;// code call per second
       this.speed = speed;
@@ -36,7 +36,7 @@ public class DriveForwardTime extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.driveCartesian(0, -1, 0, speed);
+    drive.driveCartesian(0, 1, 0, speed);
     time++;
   }
 

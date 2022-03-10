@@ -84,10 +84,10 @@ public class RaiseBallsPos extends CommandBase {
 
   private void runMotor(){
     if(motorPosition-lifterStartPosition > position){
-      if(Math.abs(motorPosition-lifterStartPosition - position) > 38000){
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 32000){
         lifter.driveLifter(-maxSpeed);
       }
-      else if(Math.abs(motorPosition-lifterStartPosition - position) > 33000){
+      else if(Math.abs(motorPosition-lifterStartPosition - position) > 25000){
         lifter.driveLifter(-maxSpeed/2 - 0.05);
       }
       else if(Math.abs(motorPosition-lifterStartPosition - position) < 7000){
@@ -98,10 +98,10 @@ public class RaiseBallsPos extends CommandBase {
       }
     }
     else{
-      if(Math.abs(motorPosition-lifterStartPosition - position) > 38000){
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 32000){
         lifter.driveLifter(maxSpeed);
       }
-      else if(Math.abs(motorPosition-lifterStartPosition - position) > 33000){
+      else if(Math.abs(motorPosition-lifterStartPosition - position) > 25000){
         lifter.driveLifter(maxSpeed/2 + 0.05);
       }
       else if(Math.abs(motorPosition-lifterStartPosition - position) < 5000){

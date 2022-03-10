@@ -55,28 +55,45 @@ public class JoystickControlSystem {
     JoystickButton shootBall = new JoystickButton(driverJoystick, 1);
     shootBall.whenHeld(shootBallCommand);
     
-    RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.4);
+    RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.7);
     JoystickButton toggleBallPosition = new JoystickButton(driverJoystick, 2);
     toggleBallPosition.whenPressed(controllerRaiseBallsToggle);
     JoystickButton xboxToggleBallPosition = new JoystickButton(xboxController, 1);
     xboxToggleBallPosition.whenPressed(controllerRaiseBallsToggle);
 
     JoystickButton putBallsDown = new JoystickButton(driverJoystick, 3);
-    putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.4));
+    putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.7));
     // JoystickButton xboxPutBallsDown = new JoystickButton(xboxController, 3);
     // xboxPutBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.6));
 
     JoystickButton putBallsUp = new JoystickButton(driverJoystick, 4);
-    putBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.4));
+    putBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
     JoystickButton xboxPutBallsUp = new JoystickButton(xboxController, 2);
-    xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.4));
+    xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
 
-    JoystickButton climb = new JoystickButton(driverJoystick, 5);
-    // climb.whileHeld(new StartEndCommand(() -> lifter.driveLifter(-0.35), () -> lifter.driveLifter(0), lifter));
-      climb.whenPressed(new RaiseBallsPos(lifter, -6, 0.4));
+    RaiseBallsPos armClimbPosition = new RaiseBallsPos(lifter, -6.5, 0.4);
+    JoystickButton climb1 = new JoystickButton(driverJoystick, 5);
+      climb1.whenPressed(armClimbPosition);
+
+      JoystickButton climb2 = new JoystickButton(driverJoystick, 6);
+      climb2.whenPressed(armClimbPosition);
+
+      JoystickButton climb3 = new JoystickButton(driverJoystick, 7);
+      climb3.whenPressed(armClimbPosition);
+
+    RaiseBallsPos armDrivePosition = new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition + 2, 0.4);
+
+    JoystickButton drivePosition1 = new JoystickButton(driverJoystick, 11);
+    drivePosition1.whenPressed(armDrivePosition);
+    JoystickButton drivePosition2 = new JoystickButton(driverJoystick, 12);
+    drivePosition2.whenPressed(armDrivePosition);
+    JoystickButton drivePosition3 = new JoystickButton(driverJoystick, 13);
+    drivePosition3.whenPressed(armDrivePosition);
   }
 
   public static double getThrottle() {
     return driverJoystick.getThrottle();
   }
 }
+
+// climb.whileHeld(new StartEndCommand(() -> lifter.driveLifter(-0.35), () -> lifter.driveLifter(0), lifter));

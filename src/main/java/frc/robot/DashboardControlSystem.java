@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -27,6 +28,8 @@ public class DashboardControlSystem {
         .getEntry();
   Logger logger = Logger.getLogger(frc.robot.RobotContainer.class.getName());
 
+  private static NetworkTableEntry teleTime;
+
   public static void initialize(MecanumDriveSubsystem drive, GyroSubsystem gyro, BallSubsystem balls, ClimbingSubsystem climb, ArmLifterSubsystem lifter, MassMoverSubsystem massMover) {
     SmartDashboard.putString("Limelight URL", "http://limelight.local:5801/");
     ShuffleboardLayout intakeRoller = teleopTab.getLayout("Intake roller control", BuiltInLayouts.kList)
@@ -47,7 +50,7 @@ public class DashboardControlSystem {
 
 
     teleopTab.add("Intake Lifter Go to Position",
-      new RaiseBallsPos(lifter, intakeLifterPos, 0.4))
+      new RaiseBallsPos(lifter, intakeLifterPos, 0.7))
       .withPosition(1, 0).withSize(2,1);
     StartEndCommand intakeLifterPercent = new StartEndCommand(() -> 
     lifter.driveLifter(intakeLifterSpeed.getDouble(0.3)),() -> lifter.stopLifter(), lifter);
@@ -109,5 +112,11 @@ public class DashboardControlSystem {
     // endgameTab.add("10 pt climb step 1", highClimbStep1);
     // endgameTab.add("10 pt climb step 2", highClimbStep2);
     // endgameTab.add("10 pt climb step 3", highClimbStep3);
+    teleTime = teleopTab.add("Time Left", 135).withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 135)).withPosition(0, 3).withSize(2, 1).getEntry();
+  }
+
+  public static void setTeleTime(double time){
+    teleTime.forceSetDouble(time);
   }
 }

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveForwardTime;
+import frc.robot.commands.DriveReverseTime;
 import frc.robot.commands.DriveStraightPos;
 import frc.robot.commands.GyroTurn;
 import frc.robot.commands.RaiseBallsPos;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
@@ -37,9 +39,9 @@ public class RobotContainer {
 
   private static void initializeAutonomousChooser(){
     autoChooser = new SendableChooser<>();
-    ParallelCommandGroup basicAutoStep1 = new ParallelCommandGroup(new DriveForwardTime(drive, 1, 0.4), new ShootBalls(ballSubysytem, 1.2));
-    SequentialCommandGroup basicAuto = new SequentialCommandGroup(basicAutoStep1, new DriveStraightPos(drive, -80, 0.6));
-    autoChooser.setDefaultOption("basic auto", basicAuto);
+    ParallelCommandGroup basicAutoStep1 = new ParallelCommandGroup(new DriveForwardTime(drive, 1.5, 0.1), new ShootBalls(ballSubysytem, 3));
+    // SequentialCommandGroup basicAuto = new SequentialCommandGroup(basicAutoStep1, new DriveReverseTime(drive, 10, 0.1));
+    autoChooser.setDefaultOption("basic auto", basicAutoStep1);
 
     ParallelCommandGroup step2Right = new ParallelCommandGroup(new DriveStraightPos(drive, 6, 0.4), new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 1));
     ParallelCommandGroup step5Right = new ParallelCommandGroup(new DriveStraightPos(drive, 100, 0.6), new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));//slowed down cause unnessasry speed also keeps center of gravity lower for longer
@@ -56,9 +58,15 @@ public class RobotContainer {
 
     autoChooser.addOption("Complex auto right", complexAutoRight);
     autoChooser.addOption("Complex auto left", complexAutoLeft);
+    autoChooser.addOption("do nothing", null);
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
   }
   public static Command getAutonomousCommand(){
-    return autoChooser.getSelected();
+    SequentialCommandGroup auto = new SequentialCommandGroup(new ShootBalls(ballSubysytem, 4), new DriveReverseTime(drive, 7, 0.23), new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.7));
+    return auto;
+  }
+
+  public static void setTeleTime(double time){
+    DashboardControlSystem.setTeleTime(time);
   }
 }

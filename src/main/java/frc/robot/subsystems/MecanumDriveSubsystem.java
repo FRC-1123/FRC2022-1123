@@ -33,6 +33,9 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     rearLeft.setNeutralMode(NeutralMode.Brake);
     frontRight.setNeutralMode(NeutralMode.Brake);
     rearRight.setNeutralMode(NeutralMode.Brake);
+    // frontLeft.setNeutralMode(NeutralMode.Coast);
+    // frontRight.setNeutralMode(NeutralMode.Coast);
+
 
     m_robotDrive = new AdvancedMecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
     setName("Drive Subsystem");
