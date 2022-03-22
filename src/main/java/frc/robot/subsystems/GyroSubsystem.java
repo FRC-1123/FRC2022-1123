@@ -17,7 +17,7 @@ public class GyroSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
    	// This method will be called once per scheduler run
-    SmartDashboard.putNumber("Gyro Angle", Gyro.getAngle());
+    // SmartDashboard.putNumber("Gyro Angle", Gyro.getAngle());
   }
 
   public void calibrateGyro(){

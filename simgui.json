@@ -1,12 +1,28 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "Talon FX[11]": {
+        "header": {
+          "open": true
+        }
+      },
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ArmLifterSubsystem/Arm lifter Subsystem": "Subsystem",
       "/LiveWindow/BallSubsystem": "Subsystem",
       "/LiveWindow/BallSubsystem/Ball Subsystem": "Subsystem",
       "/LiveWindow/ClimbingSubsystem/Climbing Subsystem": "Subsystem",
       "/LiveWindow/GyroSubsystem": "Subsystem",
       "/LiveWindow/GyroSubsystem/Gyro subsystem": "Subsystem",
+      "/LiveWindow/MassMoverSubsystem/Mass Mover Subsystem": "Subsystem",
       "/LiveWindow/MecanumDriveSubsystem": "Subsystem",
       "/LiveWindow/MecanumDriveSubsystem/Drive Subsystem": "Subsystem",
       "/LiveWindow/Ungrouped/MecanumDrive[1]": "MecanumDrive",
@@ -15,16 +31,35 @@
       "/Shuffleboard/Endgame/10 pt climb step 1": "Command",
       "/Shuffleboard/Endgame/10 pt climb step 2": "Command",
       "/Shuffleboard/Endgame/10 pt climb step 3": "Command",
+      "/Shuffleboard/Endgame/Raise Hooks": "Command",
+      "/Shuffleboard/Endgame/mass mover voltage": "Command",
+      "/Shuffleboard/Endgame/spin mass mover": "Command",
+      "/Shuffleboard/Teleop/Calibrate intake arm": "Command",
+      "/Shuffleboard/Teleop/Calibrate intake arm and Go up": "Command",
+      "/Shuffleboard/Teleop/Intake Lifter Go to Position": "Command",
       "/Shuffleboard/Teleop/Intake Lifter Stop": "Command",
+      "/Shuffleboard/Teleop/Intake Lifter run voltage": "Command",
       "/Shuffleboard/Teleop/Intake Motor Stop": "Command",
       "/Shuffleboard/Teleop/Intake Motor Toggle": "Command",
       "/Shuffleboard/Teleop/Intake Motor Toggle at Dashboard Speed": "Command",
+      "/Shuffleboard/Teleop/Intake roller control/Intake Motor Toggle": "Command",
+      "/Shuffleboard/Teleop/Intake roller control/Intake Motor Toggle at Dashboard Speed": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Lifter Go to Position": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Lifter run voltage": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Motor Start": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Motor Start at Dashboard speed": "Command",
       "/Shuffleboard/Teleop/Motor Control/Intake Motor Stop": "Command",
-      "/SmartDashboard/Ball Subsystem": "Subsystem"
+      "/Shuffleboard/Testing Tab/DriveStraightPos": "Command",
+      "/Shuffleboard/Testing Tab/GyroTurn": "Command",
+      "/Shuffleboard/Testing Tab/RaiseHooksPos": "Command",
+      "/Shuffleboard/Testing Tab/calibrate Gyro": "Command",
+      "/SmartDashboard/Autonomous Chooser": "String Chooser",
+      "/SmartDashboard/Ball Subsystem": "Subsystem",
+      "/SmartDashboard/Ball Subsystem show value": "String Chooser",
+      "/SmartDashboard/Climbing Subsystem show value": "String Chooser",
+      "/SmartDashboard/Lifter Subsystem show value": "String Chooser",
+      "/SmartDashboard/Mass Mover Subsystem show value": "String Chooser",
+      "/SmartDashboard/Mecanum Subsystem show value": "String Chooser"
     }
   },
   "NetworkTables": {
@@ -34,8 +69,7 @@
           "open": true
         },
         "open": true
-      },
-      "open": true
+      }
     },
     "Shuffleboard": {
       " Motor Settings": {
@@ -44,8 +78,16 @@
       "Teleop": {
         "Motor Control": {
           "open": true
-        }
-      }
+        },
+        "open": true
+      },
+      "Testing Tab": {
+        "GyroTurn": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
     }
   }
 }

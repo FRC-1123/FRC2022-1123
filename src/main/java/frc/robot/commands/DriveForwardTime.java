@@ -38,6 +38,7 @@ public class DriveForwardTime extends CommandBase {
   public void execute() {
     drive.driveCartesian(0, -1, 0, speed);
     time++;
+    // System.out.println("in drive forward time;");
   }
 
   // Called once the command ends or is interrupted.

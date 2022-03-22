@@ -58,7 +58,7 @@ public class MoveMassMoversPos extends CommandBase {
     if(positionEntry != null){
       position = positionEntry.getDouble(0);
     }
-    position = position * 56.8; //change this assumes a 10 to 1 this is in degrees 2048 * 10 / 360
+    position = position * 568; //change this assumes a 100 to 1 this is in degrees 2048 * 10 / 360
     move();
   }
 
@@ -77,15 +77,15 @@ public class MoveMassMoversPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double massMoverDelta = mover.getMassMoverPosition()-mover.getMassMoverStartPosition() - position;
-    if(Math.abs(massMoverDelta) < 4000){
+    double massMoverDelta = getDelta();
+    if(Math.abs(massMoverDelta) < 5000){
       return true;
     }
     return false;
   }
 
   private void move(){
-    double massMoverDelta = mover.getMassMoverPosition()-mover.getMassMoverStartPosition() - position;
+    double massMoverDelta = getDelta();
     if(massMoverDelta > 0){
       if(Math.abs(massMoverDelta) > 30000)
         mover.runMassMover(speed);
@@ -102,5 +102,9 @@ public class MoveMassMoversPos extends CommandBase {
       else
         mover.runMassMover(-speed/2);
     }
+  }
+  
+  private double getDelta(){
+    return mover.getMassMoverPosition()-mover.getMassMoverStartPosition() - position;
   }
 }

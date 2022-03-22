@@ -1,10 +1,11 @@
 package frc.robot.commands;
 
-import java.util.logging.Logger;
+import edu.wpi.first.wpilibj.Timer;
+
+// import java.util.logging.Logger;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BallSubsystem;
-// import java.util.logging.Logger;
 
 
 /**
@@ -13,16 +14,16 @@ import frc.robot.subsystems.BallSubsystem;
 public class ShootBalls extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
-  int time = 0;
+  // private final Logger logger = Logger.getLogger(this.getClass().getName());
   BallSubsystem balls;
   int endTime;
+  int time = 0;
 /**
  * @param time time in seconds for ball to shoot
  */
-  public ShootBalls(BallSubsystem balls, double endtime) {
+  public ShootBalls(BallSubsystem balls, int endTime) {
       this.balls = balls;
-      this.endTime = endTime * 10000;
+      this.endTime = endTime * 50;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(balls);
     }
@@ -30,7 +31,6 @@ public class ShootBalls extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    balls.spinIntake(-1);
     time = 0;
   }
 
@@ -38,8 +38,8 @@ public class ShootBalls extends CommandBase {
   @Override
   public void execute() {
     balls.spinIntake(-1);
-    // logger.info("in shoot balls " + time);
     time++;
+    // logger.info("in shoot balls " + time);
   }
 
   // Called once the command ends or is interrupted.
@@ -51,7 +51,7 @@ public class ShootBalls extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(time > 200){
+    if(time > endTime){
       return true;
     }
     return false;

@@ -9,10 +9,10 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int frontLeftDriveMotorCanID = 11;
-    public static final int rearLeftDriveMotorCanID = 13;
-    public static final int frontRightDriveMotorCanID = 12;
-    public static final int rearRightDriveMotorCanID = 14;
+    public static final int frontLeftDriveMotorCanID = 14;
+    public static final int rearLeftDriveMotorCanID = 12;
+    public static final int frontRightDriveMotorCanID = 13;
+    public static final int rearRightDriveMotorCanID = 11;
 
     public static final int intakeBallMotorCanID = 21;
     public static final int intakeLifterMotorCanID = 20;
@@ -25,8 +25,16 @@ public final class Constants {
     public static final int xBoxChannel = 1;
 
     public static final double intakeLifterTopPosition = 0;
-    public static final double intakeLifterDownPosition = -18.4;//distance between top and bottom make sure it is negative
+    public static final double intakeLifterDownPosition = -17;// -17.1 best value distance between top and bottom make sure it is negative
     public static final double intakeLifterScorePosition = intakeLifterTopPosition;
-    public static final double intakeLifterWheeliePosition = intakeLifterDownPosition + 2;
+    public static final double intakeLifterWheeliePosition = intakeLifterDownPosition + 1;
+    public static final double intakeLifterEndgame10ptUpPosition = intakeLifterWheeliePosition + 4;
     public static final double intakeLifterEndgamePosition = intakeLifterDownPosition + 0.75;
+
+    public static final double endgameMassAtWeelie = 80; //TODO: find exact value, this is total guess
+    public static final double endgameMassFlat = 100; //TODO: find exact value, this is total guess
+    
+    public static final double hookDeployed10pt = 15; //TODO: find exact value
+    public static final double hookRetracted10pt = 10; //TODO: find exact value
+    public static final int FingerCanID = 0; //TODO: find correct value
 }

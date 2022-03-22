@@ -18,8 +18,8 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 public class DashboardControlSystem {
-  private static ShuffleboardTab teleopTab = Shuffleboard.getTab("Teleop");;
-  // private static ShuffleboardTab endgameTab;
+  private static ShuffleboardTab teleopTab = Shuffleboard.getTab("Teleop");
+  private static ShuffleboardTab endgameTab;
   private static NetworkTableEntry intakeLifterSpeed =
   teleopTab.add("Intake Lifter Volt", 0).withPosition(5, 0)
         .getEntry();
@@ -50,7 +50,7 @@ public class DashboardControlSystem {
 
 
     teleopTab.add("Intake Lifter Go to Position",
-      new RaiseBallsPos(lifter, intakeLifterPos, 0.7))
+      new RaiseBallsPos(lifter, intakeLifterPos, 1))
       .withPosition(1, 0).withSize(2,1);
     StartEndCommand intakeLifterPercent = new StartEndCommand(() -> 
     lifter.driveLifter(intakeLifterSpeed.getDouble(0.3)),() -> lifter.stopLifter(), lifter);
@@ -63,7 +63,7 @@ public class DashboardControlSystem {
       .withPosition(2, 1).withSize(2,1);
 
     SequentialCommandGroup calibrateIntakeArmCommand= new SequentialCommandGroup(new CalibrateIntakeArm(lifter),
-     new RaiseBallsPos(lifter, -Constants.intakeLifterDownPosition + 0.1, 0.3), new InstantCommand(() -> lifter.resetPos()));
+     new RaiseBallsPos(lifter, -Constants.intakeLifterDownPosition + 0.25, 0.7), new InstantCommand(() -> lifter.resetPos()));
     calibrateIntakeArmCommand.setName("Calibrate Intake Arm And Go up");
     teleopTab.add("Calibrate intake arm and Go up", calibrateIntakeArmCommand)
     .withPosition(0, 1).withSize(2,1);
@@ -84,39 +84,58 @@ public class DashboardControlSystem {
     testingTab.add(calibrateGyro);
 
 
-    // endgameTab = Shuffleboard.getTab("Endgame");
+    endgameTab = Shuffleboard.getTab("Endgame");
     // NetworkTableEntry endgameMoveSpeed =
     //   endgameTab.add("DriveTrainSpeed", 0.2)
     //     .getEntry();
-    // NetworkTableEntry massMoverSpeed =
-    //   endgameTab.add("Mass mover speed", 0.1)
-    //     .getEntry();
+    NetworkTableEntry massMoverSpeed =
+      endgameTab.add("Mass mover speed", 0.1)
+        .getEntry();
 
-    // NetworkTableEntry hookPosition = endgameTab.add("Hook position", 1).getEntry();
-    // NetworkTableEntry MassMoverPosition = endgameTab.add("Mass Mover position", 1).getEntry();
+    NetworkTableEntry massMoverVolt =
+    endgameTab.add("Mass mover Volt", 0.1)
+      .getEntry();
 
-    // endgameTab.add("Raise Hooks", new RaiseHooksPos(climb, hookPosition));
-    // endgameTab.add("spin mass mover", new MoveMassMoversPos(massMover, MassMoverPosition, massMoverSpeed));
+    NetworkTableEntry hookPosition = endgameTab.add("Hook position", 1).getEntry();
+    NetworkTableEntry MassMoverPosition = endgameTab.add("Mass Mover position", 1).getEntry();
 
-    // BaseClimbCommand highClimbStep1 = new BaseClimbCommand(climb, balls, lifter, massMover, 0, 30, Constants.intakeLifterTopPosition, massMoverSpeed);
+    endgameTab.add("Raise Hooks", new RaiseHooksPos(climb, hookPosition));
+    endgameTab.add("spin mass mover", new MoveMassMoversPos(massMover, MassMoverPosition, massMoverSpeed));
+    endgameTab.add("mass mover voltage", new StartEndCommand(() -> massMover.runMassMover(massMoverVolt.getDouble(0.2)), () -> massMover.stopMassMover(), massMover));
+
+    // ShuffleboardTab climb10ptTab = Shuffleboard.getTab("Teleop");
+
+    // BaseClimbCommand highClimbStep1_1 = new BaseClimbCommand(climb, balls, lifter, massMover, 0, 0, Constants.intakeLifterTopPosition, massMoverSpeed);
+    // BaseClimbCommand highClimbStep1_2 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassUpPosition, 0, Constants.intakeLifterTopPosition, massMoverSpeed);
+    // SequentialCommandGroup highClimbStep1 = new SequentialCommandGroup(highClimbStep1_1, highClimbStep1_2);
     // highClimbStep1.setName("10 pt climb, robot in the endzone");
-    // BaseClimbCommand highClimbStep2_1 = new BaseClimbCommand(climb, drive, balls, lifter, massMover, 14, 0, 40, Constants.intakeLifterWheeliePosition, endgameMoveSpeed, massMoverSpeed);
-    // BaseClimbCommand highClimbStep2_2 = new BaseClimbCommand(climb, drive, balls, lifter, massMover, 40, 0, 50, Constants.intakeLifterWheeliePosition, endgameMoveSpeed, massMoverSpeed);
-    // BaseClimbCommand highClimbStep2_3 = new BaseClimbCommand(climb, drive, balls, lifter, massMover, 6, 180, 72, Constants.intakeLifterWheeliePosition, endgameMoveSpeed, massMoverSpeed);
+
+    // BaseClimbCommand highClimbStep2_1 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassUpPosition + 10, 0, Constants.intakeLifterWheeliePosition, massMoverSpeed);
+    // BaseClimbCommand highClimbStep2_2 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassDeployed, 0, Constants.intakeLifterWheeliePosition, massMoverSpeed);
+    // BaseClimbCommand highClimbStep2_3 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassDeployed, Constants.hookDeployed10pt, Constants.intakeLifterWheeliePosition, massMoverSpeed);
     // SequentialCommandGroup highClimbStep2 = new SequentialCommandGroup(highClimbStep2_1, highClimbStep2_2, highClimbStep2_3);
-    // highClimbStep2.setName("10 pt climb, robot on the wall"); //6ft drive distance to bar.
-    // BaseClimbCommand highClimbStep3_1 = new BaseClimbCommand(climb, drive, balls, lifter, massMover, 2, 0, 72, Constants.intakeLifterWheeliePosition, endgameMoveSpeed, massMoverSpeed);//72 inches 
-    // BaseClimbCommand highClimbStep3_2 = new BaseClimbCommand(climb, drive, balls, lifter, massMover, 2, 0, 50, Constants.intakeLifterEndgamePosition, endgameMoveSpeed, massMoverSpeed);
-    // SequentialCommandGroup highClimbStep3 = new SequentialCommandGroup(highClimbStep3_1, highClimbStep3_2);
+    // highClimbStep2.setName("10 pt climb, robot under the bar at mark");
+
+    // BaseClimbCommand highClimbStep3_1 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassDeployed, Constants.hookDeployed10pt - 5, Constants.intakeLifterWheeliePosition, massMoverSpeed);
+    // BaseClimbCommand highClimbStep3_2 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassDeployed, Constants.hookDeployed10pt - 5, Constants.intakeLifterEndgame10ptUpPosition, massMoverSpeed);
+    // BaseClimbCommand highClimbStep3_3 = new BaseClimbCommand(climb, balls, lifter, massMover, Constants.endgameMassDeployed, Constants.hookRetracted10pt, Constants.intakeLifterEndgame10ptUpPosition, massMoverSpeed);
+    // SequentialCommandGroup highClimbStep3 = new SequentialCommandGroup(highClimbStep3_1, highClimbStep3_2, highClimbStep3_3);
     // highClimbStep3.setName("10 pt climb, hooks on the bar");
-    // endgameTab.add("10 pt climb step 1", highClimbStep1);
-    // endgameTab.add("10 pt climb step 2", highClimbStep2);
-    // endgameTab.add("10 pt climb step 3", highClimbStep3);
+
+    // climb10ptTab.add("10 pt climb step 1", highClimbStep1);
+    // climb10ptTab.add("10 pt climb step 2", highClimbStep2);
+    // climb10ptTab.add("10 pt climb step 3", highClimbStep3);
+
+
     teleTime = teleopTab.add("Time Left", 135).withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 135)).withPosition(0, 3).withSize(2, 1).getEntry();
   }
 
   public static void setTeleTime(double time){
-    teleTime.forceSetDouble(time);
+    teleTime.setDouble(time);
   }
 }
+
+
+
+

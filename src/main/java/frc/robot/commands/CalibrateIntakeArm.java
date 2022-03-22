@@ -34,7 +34,7 @@ public class CalibrateIntakeArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    lifter.driveLifter(-0.1);
+    lifter.driveLifter(-0.12);
     time++;
   }
 
@@ -52,7 +52,7 @@ public class CalibrateIntakeArm extends CommandBase {
     // if(balls.getLifterCurrent() > 0.8){
     //   return true;
     // }
-    if(time > 10 && Math.abs(lifter.getLiftMotorVelocity()) < 190){
+    if(time > 10 && Math.abs(lifter.getLiftMotorVelocity()) < 350){
       return true;
     }
     return false;

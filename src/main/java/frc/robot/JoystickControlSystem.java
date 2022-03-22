@@ -29,15 +29,17 @@ public class JoystickControlSystem {
 
     logger.info("Mecanum drive subsystem defaulting to driveCartesian.");
     RunCommand driveCommand = new RunCommand(() -> driveSubsystem.driveCartesian(-driverJoystick.getX(),
-    driverJoystick.getY(), driverJoystick.getZ()/2, (1 - driverJoystick.getThrottle()) / 2), driveSubsystem);
+    driverJoystick.getY(), driverJoystick.getZ()/2, (1 - driverJoystick.getThrottle())), driveSubsystem);
     driveCommand.setName("Joystick drive");
     driveSubsystem.setDefaultCommand(driveCommand);
     // ballSubsystem.setDefaultCommand(new RunCommand(() -> ballSubsystem.spinIntake(
     //   Math.abs(driverJoystick.getY()*((1 - driverJoystick.getThrottle()) / 4))+0.1), ballSubsystem));
     
     ballSubsystem.setDefaultCommand(new RunCommand(() -> {
-      if((lifter.getLiftMotorPosition() - lifter.getStartPosition()) / 24576 < Constants.intakeLifterDownPosition + 1)
+      if((lifter.getLiftMotorPosition() - lifter.getStartPosition()) / 20480 < Constants.intakeLifterDownPosition + 1.7){
         ballSubsystem.spinIntake(0.4);
+        System.out.println("in balls run");
+      }
       else
         ballSubsystem.spinIntake(0);
       }, ballSubsystem));
@@ -55,21 +57,19 @@ public class JoystickControlSystem {
     JoystickButton shootBall = new JoystickButton(driverJoystick, 1);
     shootBall.whenHeld(shootBallCommand);
     
-    RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.7);
-    JoystickButton toggleBallPosition = new JoystickButton(driverJoystick, 2);
-    toggleBallPosition.whenPressed(controllerRaiseBallsToggle);
-    JoystickButton xboxToggleBallPosition = new JoystickButton(xboxController, 1);
-    xboxToggleBallPosition.whenPressed(controllerRaiseBallsToggle);
+    // RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.8);
+    // JoystickButton toggleBallPosition = new JoystickButton(driverJoystick, 2);
+    // toggleBallPosition.whenPressed(controllerRaiseBallsToggle);
 
     JoystickButton putBallsDown = new JoystickButton(driverJoystick, 3);
-    putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.7));
+    putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 1));
     // JoystickButton xboxPutBallsDown = new JoystickButton(xboxController, 3);
     // xboxPutBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 0.6));
 
     JoystickButton putBallsUp = new JoystickButton(driverJoystick, 4);
-    putBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
-    JoystickButton xboxPutBallsUp = new JoystickButton(xboxController, 2);
-    xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
+    putBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 1));
+    // JoystickButton xboxPutBallsUp = new JoystickButton(xboxController, 2);
+    // xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
 
     RaiseBallsPos armClimbPosition = new RaiseBallsPos(lifter, -6.5, 0.4);
     JoystickButton climb1 = new JoystickButton(driverJoystick, 5);

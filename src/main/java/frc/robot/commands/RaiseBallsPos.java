@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmLifterSubsystem;
 import java.util.logging.Logger;
@@ -40,19 +41,19 @@ public class RaiseBallsPos extends CommandBase {
    */
   public RaiseBallsPos(ArmLifterSubsystem lifter, double position, double maxSpeed) {
     this.lifter = lifter;
-    this.position = position * 24576;
+    this.position = position * 20480;
     this.maxSpeed = maxSpeed;
     lifterStartPosition = lifter.getStartPosition();
     addRequirements(lifter);
   }
-
+  double startTime;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     logger.info("Got to Raise balls activate");
-
+    startTime = Timer.getFPGATimestamp();
     if(positionEntry != null){
-      position = positionEntry.getDouble(2) * 24576;
+      position = positionEntry.getDouble(2) * 20480;
     }
     lifterStartPosition = lifter.getStartPosition();
     runMotor();
@@ -69,6 +70,7 @@ public class RaiseBallsPos extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    logger.info("time taken = " + (Timer.getFPGATimestamp() - startTime));
     lifter.stopLifter();
   }
 
@@ -76,6 +78,7 @@ public class RaiseBallsPos extends CommandBase {
   @Override
   public boolean isFinished() {
     if(Math.abs(motorPosition-lifterStartPosition - position) < 500){
+      logger.info("End position " + lifter.getLiftMotorPosition());
       return true;
     }
     return false;
@@ -84,34 +87,35 @@ public class RaiseBallsPos extends CommandBase {
 
   private void runMotor(){
     if(motorPosition-lifterStartPosition > position){
-      if(Math.abs(motorPosition-lifterStartPosition - position) > 32000){
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 35000){ // going down overshoot 2000
         lifter.driveLifter(-maxSpeed);
       }
-      else if(Math.abs(motorPosition-lifterStartPosition - position) > 25000){
-        lifter.driveLifter(-maxSpeed/2 - 0.05);
-      }
+      // else if(Math.abs(motorPosition-lifterStartPosition - position) > 23000){
+      //   lifter.driveLifter(-maxSpeed/2 - 0.05);
+      // }
       else if(Math.abs(motorPosition-lifterStartPosition - position) < 7000){
-        lifter.driveLifter(-0.15);
+        lifter.driveLifter(-0.23);
       }
       else{
-        lifter.driveLifter(-0.2);
+        lifter.driveLifter(-0.3);
       }
     }
     else{
-      if(Math.abs(motorPosition-lifterStartPosition - position) > 32000){
+      if(Math.abs(motorPosition-lifterStartPosition - position) > 30000){ //going up tick 2000
         lifter.driveLifter(maxSpeed);
       }
-      else if(Math.abs(motorPosition-lifterStartPosition - position) > 25000){
-        lifter.driveLifter(maxSpeed/2 + 0.05);
-      }
-      else if(Math.abs(motorPosition-lifterStartPosition - position) < 5000){
-        lifter.driveLifter(.15);
+      // else if(Math.abs(motorPosition-lifterStartPosition - position) > 23000){
+      //   lifter.driveLifter(maxSpeed/2 + 0.05);
+      // }
+      else if(Math.abs(motorPosition-lifterStartPosition - position) < 4000){
+        lifter.driveLifter(.23);
       }
       else{
-        lifter.driveLifter(0.2);
+        lifter.driveLifter(0.3);
       }
     }
   }
+  
   protected void setPositionGoal(double inputPosition) {
       this.position = inputPosition * 24576;
   }

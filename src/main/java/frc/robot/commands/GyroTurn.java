@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 
-// import java.util.logging.Logger;
+import java.util.logging.Logger;
 
 
 
@@ -15,7 +15,7 @@ import frc.robot.subsystems.MecanumDriveSubsystem;
 public class GyroTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  // private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
   /**
    * Creates a new ExampleCommand.
@@ -65,7 +65,14 @@ public class GyroTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double delta = Math.abs(Math.abs(rawAngleToAbsolute(gyro.getAngle()) - position));
+    double delta = 0;
+    if(gyro.getAngle() > 0)
+      delta = Math.abs(gyro.getAngle()%360 - position);
+    else{
+      delta = Math.abs(Math.abs(360 + gyro.getAngle()%360) - position);
+    }
+    // logger.info("delta " + delta);
+
     if(Math.abs(delta) < 3){
       return true;
     }
@@ -73,30 +80,50 @@ public class GyroTurn extends CommandBase {
   }
 
   private void move(){
-    double delta = Math.abs(rawAngleToAbsolute(gyro.getAngle()) - position);
-    if(delta > 180){
-      delta = 360-delta;
-      if(delta > 30)
-        drive.driveCartesian(0, 0, -1, 0.1); //0.6
-      else if(delta < 10)
-        drive.driveCartesian(0, 0, -1, 0.1); //0.3
-      else 
-        drive.driveCartesian(0, 0, -1, 0.1);
+    double gyroAngle = gyro.getAngle();
+    double delta = gyroAngle%360 - position;
+    if(Math.abs(delta) > 360){
+      delta = delta%360;
     }
-    else {
-      if(delta > 30)
-        drive.driveCartesian(0, 0, 1, 0.1);
-      else if(delta < 10)
-        drive.driveCartesian(0, 0, 1, 0.1);
-      else 
-        drive.driveCartesian(0, 0, 1, 0.1);
+    // logger.info("input angle " + gyroAngle + " ouput angle " + delta);
+    if(delta < 0){
+      delta = Math.abs(delta);
+      if(delta < 180){
+        driving(delta, 1);
+      }
+      else{
+        delta = 360 - delta;
+        driving(delta, -1);
+      }
+    }
+    else{
+      if(delta < 180){
+        driving(delta, -1);
+      }
+      else{
+        delta = 360 - delta;
+        driving(delta, 1);
+      }
     }
   }
 
-  private double rawAngleToAbsolute(double angle){
-    if(angle < 0){
-      return 360 + (angle % 360);
-    }
-    return angle % 360;
+  private void driving(double angle, int direction){ 
+    angle = Math.abs(angle);
+    if(angle > 30)
+          drive.driveCartesian(0, 0, direction, 0.3);
+        else if(angle < 10)
+          drive.driveCartesian(0, 0, direction, 0.1);
+        else 
+          drive.driveCartesian(0, 0, direction, 0.2);
   }
+
+  // private double rawAngleToAbsolute(double angle){
+  //   // if(angle < 0){
+  //   //   return 360 + (angle % 360);
+  //   // }
+  //   // return angle % 360;
+  //   double delta = (angle %= 360) >= 0 ? angle : (angle + 360);
+  //   logger.info("input angle " + angle + " ouput angle " + delta);
+  //   return delta;
+  // }
 }

@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called once when teleop is enabled. */
-  double startTime = Timer.getFPGATimestamp();
+  double startTime;
   @Override
   public void teleopInit() {
     CommandScheduler.getInstance().cancelAll();
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
     counter++;
     CommandScheduler.getInstance().run();
     if(counter % 50 == 0){
-    RobotContainer.setTeleTime(135- (Timer.getFPGATimestamp()-startTime));
+    RobotContainer.setTeleTime(138- (Timer.getFPGATimestamp()-startTime)); //138 instead of 135 because matches are a little long
     }
   }
 

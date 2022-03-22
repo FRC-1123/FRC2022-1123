@@ -8,7 +8,8 @@ import frc.robot.drive.AdvancedMecanumDrive;
 import java.util.logging.Logger;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.*;
+
+import frc.robot.CalebFalcon;
 import frc.robot.Constants;
 
 public class MecanumDriveSubsystem extends SubsystemBase {
@@ -18,24 +19,21 @@ public class MecanumDriveSubsystem extends SubsystemBase {
   /**
    * Creates a new MecanumDriveSubsystem.
    */
-    WPI_TalonFX frontLeft;
-    WPI_TalonFX rearLeft;
-    WPI_TalonFX frontRight;
-    WPI_TalonFX rearRight;
+  CalebFalcon frontLeft;
+  CalebFalcon rearLeft;
+  CalebFalcon frontRight;
+  CalebFalcon rearRight;
     SendableChooser<Boolean> showValues;
   public MecanumDriveSubsystem() {
-    frontLeft = new WPI_TalonFX(Constants.frontLeftDriveMotorCanID);
-    rearLeft = new WPI_TalonFX(Constants.rearLeftDriveMotorCanID);
-    frontRight = new WPI_TalonFX(Constants.frontRightDriveMotorCanID);
-    rearRight = new WPI_TalonFX(Constants.rearRightDriveMotorCanID);
+    frontLeft = new CalebFalcon(Constants.frontLeftDriveMotorCanID, false);
+    rearLeft = new CalebFalcon(Constants.rearLeftDriveMotorCanID, false);
+    frontRight = new CalebFalcon(Constants.frontRightDriveMotorCanID, true);
+    rearRight = new CalebFalcon(Constants.rearRightDriveMotorCanID, true);
 
     frontLeft.setNeutralMode(NeutralMode.Brake);
     rearLeft.setNeutralMode(NeutralMode.Brake);
     frontRight.setNeutralMode(NeutralMode.Brake);
     rearRight.setNeutralMode(NeutralMode.Brake);
-    // frontLeft.setNeutralMode(NeutralMode.Coast);
-    // frontRight.setNeutralMode(NeutralMode.Coast);
-
 
     m_robotDrive = new AdvancedMecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
     setName("Drive Subsystem");
@@ -64,12 +62,39 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rear Right Position", rearRight.getSelectedSensorPosition());
   }
 
-  public double getFrontLeftPosition(){
-    return frontLeft.getSelectedSensorPosition();
+  public double getAverageSpeed(){
+    double average = (Math.abs(frontLeft.getSelectedSensorVelocity()) + 
+     Math.abs(frontRight.getSelectedSensorVelocity()) + 
+     Math.abs(rearRight.getSelectedSensorVelocity()) +
+     Math.abs(rearLeft.getSelectedSensorVelocity()))/4;
+    return average;
   }
 
-  public double getFrontRightPosition(){
-    return frontRight.getSelectedSensorPosition();
+  public double getFrontLeftDistance(){
+    return frontLeft.getDistance();
+  }
+
+  public double getFrontRightDistance(){
+    return frontRight.getDistance();
+  }
+
+  public double getRearRightDistance(){
+    return rearRight.getDistance();
+  }
+
+  public double getRearLeftDistance(){
+    return rearLeft.getDistance();
+  }
+
+  public double getAverageDistance(){
+    return (getFrontLeftDistance() + getFrontRightDistance() + getRearRightDistance() + getRearLeftDistance())/4;
+  }
+
+  public void resetMotorPosition(){
+    frontLeft.resetDistance();
+    frontRight.resetDistance();
+    rearLeft.resetDistance();
+    rearRight.resetDistance();
   }
 
   public void driveCartesian(double yval, double xval, double zval, double throttle) {
