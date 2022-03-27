@@ -77,7 +77,7 @@ public class RaiseBallsPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(motorPosition-lifterStartPosition - position) < 500){
+    if(Math.abs(motorPosition-lifterStartPosition - position) < 250){
       logger.info("End position " + lifter.getLiftMotorPosition());
       return true;
     }

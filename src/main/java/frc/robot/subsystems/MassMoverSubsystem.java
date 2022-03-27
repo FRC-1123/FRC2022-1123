@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 
 /**
@@ -16,32 +17,32 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class MassMoverSubsystem extends SubsystemBase {
   // private Logger logger = Logger.getLogger(this.getClass().getName());
-  private CANSparkMax massMover = new CANSparkMax(Constants.massMoverCanID, MotorType.kBrushless);
-  private RelativeEncoder massMoverEncoder = massMover.getEncoder();
+  private TalonFX massMover = new TalonFX(Constants.massMoverCanID);
   private double massMoverStartPosition;
   private SendableChooser<Boolean> showValues;
 
   public MassMoverSubsystem() {
     // Wipe any prior motor settings
     // Set motor direction
-    massMoverStartPosition = massMoverEncoder.getPosition();
+    massMoverStartPosition = massMover.getSelectedSensorPosition();
     setName("Mass Mover Subsystem");
     showValues = new SendableChooser<Boolean>();
     showValues.setDefaultOption("false", false);
     showValues.addOption("true", true);
     SmartDashboard.putData("Mass Mover Subsystem show value", showValues);
+    massMover.setNeutralMode(NeutralMode.Brake);
   }
 
   public void stopMassMover(){
-    massMover.stopMotor();
+    massMover.set(ControlMode.PercentOutput, 0);
   }
 
   public void runMassMover(double percent){
-    massMover.set(percent);
+    massMover.set(ControlMode.PercentOutput, percent);
   }
 
   public double getMassMoverPosition() {
-    return massMoverEncoder.getPosition();
+    return massMover.getSelectedSensorPosition();
   }
 
   public double getMassMoverStartPosition(){
@@ -56,7 +57,7 @@ public class MassMoverSubsystem extends SubsystemBase {
   }
 
   public void updateSmartDashboard(){
-      SmartDashboard.putNumber("mass mover position", massMoverEncoder.getPosition());
-      SmartDashboard.putNumber("mass mover velocity", massMoverEncoder.getVelocity());
+      SmartDashboard.putNumber("mass mover position", massMover.getSelectedSensorPosition());
+      SmartDashboard.putNumber("mass mover velocity", massMover.getSelectedSensorVelocity());
   }
 }

@@ -4,15 +4,11 @@ import java.util.logging.Logger;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 // import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RaiseBallsPos;
-import frc.robot.commands.RaiseBallsToggle;
-import frc.robot.commands.RaiseHooksPos;
 // import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -38,7 +34,7 @@ public class JoystickControlSystem {
     ballSubsystem.setDefaultCommand(new RunCommand(() -> {
       if((lifter.getLiftMotorPosition() - lifter.getStartPosition()) / 20480 < Constants.intakeLifterDownPosition + 1.7){
         ballSubsystem.spinIntake(0.4);
-        System.out.println("in balls run");
+        // System.out.println("in balls run");
       }
       else
         ballSubsystem.spinIntake(0);
@@ -57,9 +53,7 @@ public class JoystickControlSystem {
     JoystickButton shootBall = new JoystickButton(driverJoystick, 1);
     shootBall.whenHeld(shootBallCommand);
     
-    // RaiseBallsToggle controllerRaiseBallsToggle = new RaiseBallsToggle(lifter, Constants.intakeLifterTopPosition, 0.8);
-    // JoystickButton toggleBallPosition = new JoystickButton(driverJoystick, 2);
-    // toggleBallPosition.whenPressed(controllerRaiseBallsToggle);
+
 
     JoystickButton putBallsDown = new JoystickButton(driverJoystick, 3);
     putBallsDown.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 1));
@@ -71,7 +65,7 @@ public class JoystickControlSystem {
     // JoystickButton xboxPutBallsUp = new JoystickButton(xboxController, 2);
     // xboxPutBallsUp.whenPressed(new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 0.7));
 
-    RaiseBallsPos armClimbPosition = new RaiseBallsPos(lifter, -6.5, 0.4);
+    RaiseBallsPos armClimbPosition = new RaiseBallsPos(lifter, -4.3, 0.4);
     JoystickButton climb1 = new JoystickButton(driverJoystick, 5);
       climb1.whenPressed(armClimbPosition);
 
@@ -81,14 +75,14 @@ public class JoystickControlSystem {
       JoystickButton climb3 = new JoystickButton(driverJoystick, 7);
       climb3.whenPressed(armClimbPosition);
 
-    RaiseBallsPos armDrivePosition = new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition + 2, 0.4);
+    RaiseBallsPos armDrivePosition = new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition + 2, 1);
 
-    JoystickButton drivePosition1 = new JoystickButton(driverJoystick, 11);
+    JoystickButton drivePosition1 = new JoystickButton(driverJoystick, 2);
     drivePosition1.whenPressed(armDrivePosition);
-    JoystickButton drivePosition2 = new JoystickButton(driverJoystick, 12);
-    drivePosition2.whenPressed(armDrivePosition);
-    JoystickButton drivePosition3 = new JoystickButton(driverJoystick, 13);
-    drivePosition3.whenPressed(armDrivePosition);
+    // JoystickButton drivePosition2 = new JoystickButton(driverJoystick, 12);
+    // drivePosition2.whenPressed(armDrivePosition);
+    // JoystickButton drivePosition3 = new JoystickButton(driverJoystick, 13);
+    // drivePosition3.whenPressed(armDrivePosition);
   }
 
   public static double getThrottle() {

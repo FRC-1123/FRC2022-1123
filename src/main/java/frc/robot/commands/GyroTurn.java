@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.MecanumDriveSubsystem;
 
-import java.util.logging.Logger;
+// import java.util.logging.Logger;
 
 
 
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class GyroTurn extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  // private final Logger logger = Logger.getLogger(this.getClass().getName());
   int time = 0;
   /**
    * Creates a new ExampleCommand.

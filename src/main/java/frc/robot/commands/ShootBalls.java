@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
-
 // import java.util.logging.Logger;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

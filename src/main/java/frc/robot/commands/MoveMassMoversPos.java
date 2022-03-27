@@ -58,8 +58,8 @@ public class MoveMassMoversPos extends CommandBase {
     if(positionEntry != null){
       position = positionEntry.getDouble(0);
     }
-    position = position * 568; //change this assumes a 100 to 1 this is in degrees 2048 * 10 / 360
-    move();
+    position = position * 569; //degrees 2048 * 100 / 360
+    // move();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -78,7 +78,7 @@ public class MoveMassMoversPos extends CommandBase {
   @Override
   public boolean isFinished() {
     double massMoverDelta = getDelta();
-    if(Math.abs(massMoverDelta) < 5000){
+    if(Math.abs(massMoverDelta) < 3000){
       return true;
     }
     return false;
@@ -87,17 +87,17 @@ public class MoveMassMoversPos extends CommandBase {
   private void move(){
     double massMoverDelta = getDelta();
     if(massMoverDelta > 0){
-      if(Math.abs(massMoverDelta) > 30000)
+      if(Math.abs(massMoverDelta) > 10000)
         mover.runMassMover(speed);
-      else if(Math.abs(massMoverDelta) < 7000)
+      else if(Math.abs(massMoverDelta) < 5000)
         mover.runMassMover(speed/3);
       else 
         mover.runMassMover(speed/2);
     }
     else {
-      if(Math.abs(massMoverDelta) > 30000)
+      if(Math.abs(massMoverDelta) > 10000)
         mover.runMassMover(-speed);
-      else if(Math.abs(massMoverDelta) < 7000)
+      else if(Math.abs(massMoverDelta) < 5000)
         mover.runMassMover(-speed/3);
       else
         mover.runMassMover(-speed/2);
