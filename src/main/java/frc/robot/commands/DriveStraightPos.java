@@ -87,7 +87,7 @@ public class DriveStraightPos extends CommandBase {
     if(Math.abs(getDistanceTravel() - position) < 0.5){
       return true;
     }
-    if(time > 20 && drive.getAverageSpeed() < 20){
+    if(time > 20 && drive.getAverageSpeed() < 2.5){
       return true;
     }
     return false;

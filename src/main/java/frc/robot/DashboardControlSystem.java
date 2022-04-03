@@ -64,7 +64,7 @@ public class DashboardControlSystem {
       .withPosition(2, 1).withSize(2,1);
 
     SequentialCommandGroup calibrateIntakeArmCommand= new SequentialCommandGroup(new CalibrateIntakeArm(lifter),
-     new RaiseBallsPos(lifter, -Constants.intakeLifterDownPosition + 0.05, 0.7), new InstantCommand(() -> lifter.resetPos()));
+     new RaiseBallsPos(lifter, -Constants.intakeLifterDownPosition + 0.1, 0.7), new InstantCommand(() -> lifter.resetPos()));
     calibrateIntakeArmCommand.setName("Calibrate Intake Arm And Go up");
     teleopTab.add("Calibrate intake arm and Go up", calibrateIntakeArmCommand)
     .withPosition(0, 1).withSize(2,1);

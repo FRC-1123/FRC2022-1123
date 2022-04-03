@@ -58,7 +58,7 @@ public class RobotContainer {
       new GyroTurn(drive, gyro, 339),
       new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 1));
 
-    ParallelCommandGroup rightStep = new ParallelCommandGroup(new DriveStraightPos(drive, 88, 0.3), new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 1));
+    ParallelCommandGroup rightStep = new ParallelCommandGroup(new DriveStraightPos(drive, 88, 0.35), new RaiseBallsPos(lifter, Constants.intakeLifterTopPosition, 1));
     SequentialCommandGroup complexAutoRight = new SequentialCommandGroup(
       new InstantCommand(() -> gyro.calibrateGyro()),
       new RaiseBallsPos(lifter, Constants.intakeLifterDownPosition, 1),

@@ -51,6 +51,7 @@ public class RaiseBallsPos extends CommandBase {
   @Override
   public void initialize() {
     logger.info("Got to Raise balls activate");
+    time = 0;
     startTime = Timer.getFPGATimestamp();
     if(positionEntry != null){
       position = positionEntry.getDouble(2) * 20480;
@@ -65,6 +66,7 @@ public class RaiseBallsPos extends CommandBase {
     time++;
     motorPosition = lifter.getLiftMotorPosition();
     runMotor();
+    System.out.println("lifter speed " + lifter.getLiftMotorVelocity());
   }
 
   // Called once the command ends or is interrupted.
@@ -77,7 +79,7 @@ public class RaiseBallsPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(motorPosition-lifterStartPosition - position) < 250){
+    if(Math.abs(motorPosition-lifterStartPosition - position) < 250 || (Math.abs(lifter.getLiftMotorVelocity()) < 50 && time > 50)){
       logger.info("End position " + lifter.getLiftMotorPosition());
       return true;
     }
@@ -94,7 +96,7 @@ public class RaiseBallsPos extends CommandBase {
       //   lifter.driveLifter(-maxSpeed/2 - 0.05);
       // }
       else if(Math.abs(motorPosition-lifterStartPosition - position) < 7000){
-        lifter.driveLifter(-0.23);
+        lifter.driveLifter(-0.2);
       }
       else{
         lifter.driveLifter(-0.3);
